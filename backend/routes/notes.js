@@ -8,8 +8,6 @@ const { body, validationResult } = require('express-validator');
 
 router.get('/fetchallnotes', fetchuser, async (req, res) => {
     try {
-
-
         //user: req.user.id because in fetchuser our user is req.user
         const notes = await Notes.find({ user: req.user.id })
         res.json(notes);
@@ -47,28 +45,55 @@ router.post('/addnote', fetchuser, [
     }
 });
 
-//Route 3: Update An Existing  Note using: POST "/api/notes/updatenote". Login Required
-router.put('/updatenote/:id', fetchuser,  async (req, res) => {
+//Route 3: Update An Existing  Note using: PUT "/api/notes/updatenote". Login Required
+router.put('/updatenote/:id', fetchuser, async (req, res) => {
     const { title, description, tag } = req.body;
     //create new Note object
+    try {
 
-    const newNote = {};
-    if(title){newNote.title = title};
-    if(description){newNote.description = description};
-    if(tag){newNote.tag = tag};
+        const newNote = {};
+        if (title) { newNote.title = title };
+        if (description) { newNote.description = description };
+        if (tag) { newNote.tag = tag };
 
 
-    //Find the note to be updated and update it.
-    let note = await Notes.findById(req.params.id);
-    if(!note){return res.status(404).send("Not Founded")};
+        //Find the note to be updated and update it.
+        let note = await Notes.findById(req.params.id);
+        //if note not founded
+        if (!note) { return res.status(404).send("Not Founded") };
+        //for check user valid or not
+        if (note.user.toString() !== req.user.id) {
+            return res.status(401).send("Illegal Activites")
+        }
 
-    if(note.user.toString() !== req.user.id){
-        return  res.status(401).send("Illegal Activites")
+        note = await Notes.findByIdAndUpdate(req.params.id, { $set: newNote }, { new: true });
+        res.json({ note })
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Internal server error")
     }
+});
 
-    note = await Notes.findByIdAndUpdate(req.params.id, {$set: newNote}, {new: true});
+//Route 4: Deleteing an  Existing  Note using: DELETE "/api/notes/deletenote". Login Required
+router.delete('/deletenote/:id', fetchuser, async (req, res) => {
+    try {
 
-    res.json({note})
-})
+        //Find the note to be deleted and delete it.
+        let note = await Notes.findById(req.params.id);
+        //if note not founded
+        if (!note) { return res.status(404).send("Not Founded") };
+        //Allow Deletion only if user own this note
+        if (note.user.toString() !== req.user.id) {
+            return res.status(401).send("Illegal Activites")
+        }
+
+        note = await Notes.findByIdAndDelete(req.params.id);
+
+        res.json({ "Success": "Note has been deleted", note: note })
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Internal server error")
+    }
+});
 
 module.exports = router

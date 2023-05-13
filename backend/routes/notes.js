@@ -4,7 +4,7 @@ const router = express.Router();
 var fetchuser = require('../middleware/fetchuser');
 const { body, validationResult } = require('express-validator');
 
-//Route 1: Get All The Notes using: GET "/api/notes/fetchallnotes".
+//Route 1: Get All The Notes using: GET "/api/notes/fetchallnotes". Login Required
 
 router.get('/fetchallnotes', fetchuser, async (req, res) => {
     try {
@@ -19,7 +19,7 @@ router.get('/fetchallnotes', fetchuser, async (req, res) => {
     }
 })
 
-//Route 1: Add a New Note using: POST "/api/notes/addnote".
+//Route 2: Add a New Note using: POST "/api/notes/addnote". Login Required
 
 router.post('/addnote', fetchuser, [
     body('title', "Enter a valid title").isLength({ min: 3 }),
@@ -45,6 +45,30 @@ router.post('/addnote', fetchuser, [
         console.log(error.message);
         res.status(500).send("Internal server error")
     }
+});
+
+//Route 3: Update An Existing  Note using: POST "/api/notes/updatenote". Login Required
+router.put('/updatenote/:id', fetchuser,  async (req, res) => {
+    const { title, description, tag } = req.body;
+    //create new Note object
+
+    const newNote = {};
+    if(title){newNote.title = title};
+    if(description){newNote.description = description};
+    if(tag){newNote.tag = tag};
+
+
+    //Find the note to be updated and update it.
+    let note = await Notes.findById(req.params.id);
+    if(!note){return res.status(404).send("Not Founded")};
+
+    if(note.user.toString() !== req.user.id){
+        return  res.status(401).send("Illegal Activites")
+    }
+
+    note = await Notes.findByIdAndUpdate(req.params.id, {$set: newNote}, {new: true});
+
+    res.json({note})
 })
 
 module.exports = router

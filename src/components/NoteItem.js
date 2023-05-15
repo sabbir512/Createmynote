@@ -4,11 +4,16 @@ function NoteItem(props) {
     const { note } = props;
     return (
         <div className='col-md-3'>
-            <div class="card">
-                <div class="card-body my-3">
-                    <h5 class="card-title">{note.title}</h5>
-                    <div class="card-header">{note.date}</div>
-                    <p class="card-text">{note.description}</p>
+            <div className="card">
+                <div className="card-body my-3">
+                    <div className="d-flex align-items-center">
+                    <h5 className="card-title">{note.title}</h5>
+                        <i className="fa-solid fa-trash-can mx-2"></i>
+                        <i className="fa-solid fa-user-pen max-2"></i>
+                    </div>
+                    <div className="card-header">{note.date}</div>
+                    <p className="card-text">{note.description}</p>
+
                 </div>
             </div>
         </div>

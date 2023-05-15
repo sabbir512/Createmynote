@@ -6,7 +6,7 @@ const About = () =>{
   useEffect(()=>{
     a.update();
 // eslint-disable-next-line 
-  },[]);
+  },[3]);
 
   return (
     <div>

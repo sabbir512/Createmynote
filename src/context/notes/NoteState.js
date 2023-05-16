@@ -90,5 +90,4 @@ const NoteState = (props) => {
   )
 }
 
-
 export default NoteState;

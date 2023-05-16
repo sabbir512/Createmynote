@@ -6,14 +6,37 @@ const NoteState = (props) => {
   const notesInitial = []
   const [notes, setNotes] = useState(notesInitial)
 
-  //Gets All Notes.
+  //Get All Notes
   const getNotes = async () => {
-    //TODO API Call
+    // API Call
+    const response = await fetch(`${host}/api/notes/fetchallnotes`, {
+      method: "GET",
 
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ1ZTQ3YzljNWFhMjNmMjJkODM0NzQ0In0sImlhdCI6MTY4Mzk2MTEzMn0.QALRzJQtmDNHrawpJEsiUrQ9qGXMT_NfbCHNZKjPbR8"
+      }
+    });
+    const json = await response.json();
+    console.log(json);
+     setNotes(json)
   }
+
+
   //Add a note
   const addNote = async (title, description, tag) => {
     //TODO API Call
+    const response = await fetch(`${host}/api/notes/addnote`, {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ1ZTQ3YzljNWFhMjNmMjJkODM0NzQ0In0sImlhdCI6MTY4Mzk2MTEzMn0.QALRzJQtmDNHrawpJEsiUrQ9qGXMT_NfbCHNZKjPbR8"
+      },
+      body: JSON.stringify({ title, description, tag })
+    });
+
+    //Logic to add note in client side
     console.log("Adding a new note")
     const note = {
       "_id": "645f709639f2b13ba7e5abe9q9",
@@ -24,8 +47,8 @@ const NoteState = (props) => {
       "date": "2023-05-13T11:12:22.270Z",
       "__v": 0
     };
-    setNotes(notes.concat(note));
     // setNotes
+    setNotes(notes.concat(note));
   }
 
   //Delete a note
@@ -40,10 +63,26 @@ const NoteState = (props) => {
   //Edit a note
   const editNote = async (id, title, description, tag) => {
     // API Call;
+    const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
+      method: "POST",
 
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ1ZTQ3YzljNWFhMjNmMjJkODM0NzQ0In0sImlhdCI6MTY4Mzk2MTEzMn0.QALRzJQtmDNHrawpJEsiUrQ9qGXMT_NfbCHNZKjPbR8"
+      },
+      body: JSON.stringify({ title, description, tag })
+    });
+    const json = response.json();
 
     //Logic to edit in client
-
+    for (let index = 0; index < notes.length; index++) {
+      const element = notes[index];
+      if (element._id === id) {
+        element.title = title;
+        element.description = description;
+        element.tag = tag;
+      }
+    }
   }
 
   return (

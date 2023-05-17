@@ -26,6 +26,7 @@ const NoteState = (props) => {
   //Add a note
   const addNote = async (title, description, tag) => {
     //TODO API Call
+    // eslint-disable-next-line 
     const response = await fetch(`${host}/api/notes/addnote`, {
       method: "POST",
 
@@ -52,8 +53,20 @@ const NoteState = (props) => {
   }
 
   //Delete a note
-  const deleteNote = (id) => {
-    //TODO API Call
+  const deleteNote =async (id) => {
+    //API Call
+    const response = await fetch(`${host}/api/notes/deletenote/${id}`, {
+      method: "DELETE",
+
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ1ZTQ3YzljNWFhMjNmMjJkODM0NzQ0In0sImlhdCI6MTY4Mzk2MTEzMn0.QALRzJQtmDNHrawpJEsiUrQ9qGXMT_NfbCHNZKjPbR8"
+      }
+    });
+    const json = response.json();
+    console.log(json);
+
+    //Logic For delete for client side.
     console.log("deleting the note with id" + id);
     const newNote = notes.filter((note) => { return note._id !== id })
     setNotes(newNote);
@@ -72,6 +85,7 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({ title, description, tag })
     });
+    // eslint-disable-next-line
     const json = response.json();
 
     //Logic to edit in client

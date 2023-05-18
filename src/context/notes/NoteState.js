@@ -18,7 +18,6 @@ const NoteState = (props) => {
       }
     });
     const json = await response.json();
-    console.log(json);
     setNotes(json)
   }
 
@@ -55,10 +54,8 @@ const NoteState = (props) => {
       }
     });
     const json = response.json();
-    console.log(json);
 
     //Logic For delete for client side.
-    console.log("deleting the note with id" + id);
     const newNote = notes.filter((note) => { return note._id !== id })
     setNotes(newNote);
   }
@@ -78,7 +75,6 @@ const NoteState = (props) => {
     });
     // eslint-disable-next-line
     const json = await response.json();
-    console.log(json);
 
     let newNotes = JSON.parse(JSON.stringify(notes))
     //Logic to edit in client

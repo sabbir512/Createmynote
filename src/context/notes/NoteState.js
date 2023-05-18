@@ -19,7 +19,7 @@ const NoteState = (props) => {
     });
     const json = await response.json();
     console.log(json);
-     setNotes(json)
+    setNotes(json)
   }
 
 
@@ -36,24 +36,15 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({ title, description, tag })
     });
+    const note = await response.json();
+    setNotes(notes.concat(note));
 
     //Logic to add note in client side
-    console.log("Adding a new note")
-    const note = {
-      "_id": "645f709639f2b13ba7e5abe9q9",
-      "user": "645e47c9c5aa23f22d8347443",
-      "title": title,
-      "description": description,
-      "tag": tag,
-      "date": "2023-05-13T11:12:22.270Z",
-      "__v": 0
-    };
-    // setNotes
-    setNotes(notes.concat(note));
+
   }
 
   //Delete a note
-  const deleteNote =async (id) => {
+  const deleteNote = async (id) => {
     //API Call
     const response = await fetch(`${host}/api/notes/deletenote/${id}`, {
       method: "DELETE",
@@ -77,7 +68,7 @@ const NoteState = (props) => {
   const editNote = async (id, title, description, tag) => {
     // API Call;
     const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
-      method: "POST",
+      method: "PUT",
 
       headers: {
         "Content-Type": "application/json",
@@ -86,17 +77,21 @@ const NoteState = (props) => {
       body: JSON.stringify({ title, description, tag })
     });
     // eslint-disable-next-line
-    const json = response.json();
+    const json = await response.json();
+    console.log(json);
 
+    let newNotes = JSON.parse(JSON.stringify(notes))
     //Logic to edit in client
-    for (let index = 0; index < notes.length; index++) {
-      const element = notes[index];
+    for (let index = 0; index < newNotes.length; index++) {
+      const element = newNotes[index];
       if (element._id === id) {
-        element.title = title;
-        element.description = description;
-        element.tag = tag;
+        newNotes[index].title = title;
+        newNotes[index].description = description;
+        newNotes[index].tag = tag;
+        break;
       }
     }
+    setNotes(newNotes)
   }
 
   return (

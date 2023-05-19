@@ -14,7 +14,8 @@ const NoteState = (props) => {
 
       headers: {
         "Content-Type": "application/json",
-        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ1ZTQ3YzljNWFhMjNmMjJkODM0NzQ0In0sImlhdCI6MTY4Mzk2MTEzMn0.QALRzJQtmDNHrawpJEsiUrQ9qGXMT_NfbCHNZKjPbR8"
+          //geting data from server so we can track authentication link to identify user and show them only their notes
+        "auth-token": localStorage.getItem("token")
       }
     });
     const json = await response.json(); 
@@ -31,7 +32,7 @@ const NoteState = (props) => {
 
       headers: {
         "Content-Type": "application/json",
-        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ1ZTQ3YzljNWFhMjNmMjJkODM0NzQ0In0sImlhdCI6MTY4Mzk2MTEzMn0.QALRzJQtmDNHrawpJEsiUrQ9qGXMT_NfbCHNZKjPbR8"
+        "auth-token": localStorage.getItem("token")
       },
       body: JSON.stringify({ title, description, tag })
     });
@@ -50,10 +51,11 @@ const NoteState = (props) => {
 
       headers: {
         "Content-Type": "application/json",
-        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ1ZTQ3YzljNWFhMjNmMjJkODM0NzQ0In0sImlhdCI6MTY4Mzk2MTEzMn0.QALRzJQtmDNHrawpJEsiUrQ9qGXMT_NfbCHNZKjPbR8"
+        "auth-token": localStorage.getItem("token")
       }
     });
     const json = response.json();
+    console.log(json)
 
     //Logic For delete for client side.
     const newNote = notes.filter((note) => { return note._id !== id })
@@ -69,7 +71,7 @@ const NoteState = (props) => {
 
       headers: {
         "Content-Type": "application/json",
-        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ1ZTQ3YzljNWFhMjNmMjJkODM0NzQ0In0sImlhdCI6MTY4Mzk2MTEzMn0.QALRzJQtmDNHrawpJEsiUrQ9qGXMT_NfbCHNZKjPbR8"
+        "auth-token": localStorage.getItem("token")
       },
       body: JSON.stringify({ title, description, tag })
     });

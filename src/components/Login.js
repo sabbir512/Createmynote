@@ -20,8 +20,8 @@ function Login(props) {
       if(json.success === true){
         //Redirected to page and also save the token in logal stroages
         localStorage.setItem('token', json.authtoken);
-        navigate("/");
         props.showAlert("Successfully login in to account", "success")
+        navigate("/");
       }
       else{
         //Alert for User;
@@ -34,7 +34,8 @@ function Login(props) {
       }
 
     return (
-        <div>
+        <div className='mt-2'>
+          <h3>Login to continue in MyNoteBook</h3>
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label">Email address</label>

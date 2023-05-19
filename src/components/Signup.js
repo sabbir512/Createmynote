@@ -37,9 +37,10 @@ function Signup(props) {
      }
 
   return (
-    <div className="container">
+    <div className="container mt-2">
+      <h3 className='my-2'>Create a account to use MyNoteBook</h3>
       <form onSubmit={handleSubmit}>
-        <div className="mb-3">
+        <div className="mb-3 ">
           <label htmlFor="name" className="form-label">Enter Your Name</label>
           <input type="text" className="form-control" onChange={onChange} id="name" name='name' aria-describedby="emailHelp" />
         </div> 

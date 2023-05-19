@@ -1,8 +1,16 @@
 import React from 'react'
 import { Link, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+    let navigate = useNavigate();
     let location = useLocation();
+    
+    //if users click logout button it will remove user authentication token and it will rediract it login page
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        navigate("/login")
+    };
 
     return (
         <div>
@@ -22,10 +30,12 @@ const Navbar = () => {
                             </li>
 
                         </ul>
-                        <form className="d-flex">
+
+                        {/* if anbody is login then it will show logout button not login and signup button */}
+                        {!localStorage.getItem("token") ? <form className="d-flex">
                             <Link className="btn btn-primary mx-1" to="/login" role="button">Login</Link>
                             <Link className="btn btn-primary mx-1" to="/signup " role="button">Signup</Link>
-                        </form>
+                        </form> : <button onClick={handleLogout} className="btn btn-primary">Logout</button>}
                     </div>
                 </div>
             </nav>
